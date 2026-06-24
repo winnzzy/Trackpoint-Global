@@ -1,8 +1,5 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/client";
+import { getDashboardStats } from "@/lib/actions/shipments";
 import { formatDate } from "@/lib/utils";
 import StatusBadge from "@/components/shared/StatusBadge";
 import {
@@ -15,52 +12,21 @@ import {
   Eye,
 } from "lucide-react";
 
-interface Stats {
-  total: number;
-  inTransit: number;
-  delivered: number;
-  pending: number;
-  delayed: number;
-}
+export const dynamic = "force-dynamic";
 
-interface Shipment {
-  id: string;
-  tracking_number: string;
-  sender_name: string;
-  receiver_name: string;
-  origin_city: string;
-  destination_city: string;
-  status: string;
-  created_at: string;
-}
+export default async function AdminDashboard() {
+  const { data, error } = await getDashboardStats();
 
-export default function AdminDashboard() {
-  const [stats, setStats] = useState<Stats>({ total: 0, inTransit: 0, delivered: 0, pending: 0, delayed: 0 });
-  const [recentShipments, setRecentShipments] = useState<Shipment[]>([]);
-  const [loading, setLoading] = useState(true);
-  const supabase = createClient();
+  const stats = data || {
+    total: 0,
+    inTransit: 0,
+    delivered: 0,
+    pending: 0,
+    delayed: 0,
+    recentShipments: [],
+  };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const { data: shipments } = await supabase
-        .from("shipments")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      if (shipments) {
-        setStats({
-          total: shipments.length,
-          inTransit: shipments.filter((s: Shipment) => s.status === "In Transit").length,
-          delivered: shipments.filter((s: Shipment) => s.status === "Delivered").length,
-          pending: shipments.filter((s: Shipment) => ["Pending", "Shipment Created", "Processing"].includes(s.status)).length,
-          delayed: shipments.filter((s: Shipment) => ["Delayed", "On Hold"].includes(s.status)).length,
-        });
-        setRecentShipments(shipments.slice(0, 5));
-      }
-      setLoading(false);
-    };
-    fetchData();
-  }, [supabase]);
+  const recentShipments = stats.recentShipments || [];
 
   const statCards = [
     { label: "Total Shipments", value: stats.total, icon: Package, color: "bg-blue-500", bg: "bg-blue-50" },
@@ -93,6 +59,12 @@ export default function AdminDashboard() {
         </div>
       </div>
 
+      {error && (
+        <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-700 text-sm">
+          {error}
+        </div>
+      )}
+
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         {statCards.map((card) => (
@@ -103,7 +75,7 @@ export default function AdminDashboard() {
               </div>
             </div>
             <div className="text-2xl font-bold text-navy">
-              {loading ? "—" : card.value}
+              {card.value}
             </div>
             <div className="text-sm text-gray-600 mt-0.5">{card.label}</div>
           </div>
@@ -132,15 +104,7 @@ export default function AdminDashboard() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {loading ? (
-                [...Array(5)].map((_, i) => (
-                  <tr key={i}>
-                    <td colSpan={7} className="px-6 py-4">
-                      <div className="h-4 bg-gray-100 rounded animate-pulse" />
-                    </td>
-                  </tr>
-                ))
-              ) : recentShipments.length === 0 ? (
+              {recentShipments.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="px-6 py-8 text-center text-gray-500">
                     No shipments yet.{" "}
@@ -150,7 +114,7 @@ export default function AdminDashboard() {
                   </td>
                 </tr>
               ) : (
-                recentShipments.map((shipment) => (
+                recentShipments.map((shipment: { id: string; tracking_number: string; sender_name: string; receiver_name: string; origin_city: string; destination_city: string; status: string; created_at: string }) => (
                   <tr key={shipment.id} className="hover:bg-gray-50">
                     <td className="px-6 py-3 font-mono text-xs text-navy font-medium">
                       {shipment.tracking_number}
@@ -161,7 +125,7 @@ export default function AdminDashboard() {
                       {shipment.origin_city} → {shipment.destination_city}
                     </td>
                     <td className="px-6 py-3">
-                      <StatusBadge status={shipment.status} className="text-xs" />
+                      <StatusBadge status={shipment.status} />
                     </td>
                     <td className="px-6 py-3 text-gray-500 text-xs hidden lg:table-cell">
                       {formatDate(shipment.created_at)}

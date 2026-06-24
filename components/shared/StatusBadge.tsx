@@ -1,37 +1,34 @@
-import { cn } from "@/lib/utils";
+'use client';
 
-const statusConfig: Record<string, { color: string; bg: string }> = {
-  Pending: { color: "text-gray-700", bg: "bg-gray-100" },
-  "Shipment Created": { color: "text-blue-700", bg: "bg-blue-100" },
-  Received: { color: "text-blue-700", bg: "bg-blue-100" },
-  Processing: { color: "text-indigo-700", bg: "bg-indigo-100" },
-  "In Transit": { color: "text-amber-700", bg: "bg-amber-100" },
-  "At Sorting Facility": { color: "text-purple-700", bg: "bg-purple-100" },
-  "At Customs": { color: "text-orange-dark", bg: "bg-orange/10" },
-  Cleared: { color: "text-teal-700", bg: "bg-teal-100" },
-  "Out for Delivery": { color: "text-cyan-700", bg: "bg-cyan-100" },
-  Delivered: { color: "text-green-700", bg: "bg-green-100" },
-  Delayed: { color: "text-red-700", bg: "bg-red-100" },
-  "On Hold": { color: "text-red-700", bg: "bg-red-100" },
-  Returned: { color: "text-gray-700", bg: "bg-gray-200" },
-};
+import { STATUS_COLORS } from '@/types';
 
 interface StatusBadgeProps {
   status: string;
+  size?: 'sm' | 'md' | 'lg';
+  showDot?: boolean;
   className?: string;
 }
 
-export default function StatusBadge({ status, className }: StatusBadgeProps) {
-  const config = statusConfig[status] || { color: "text-gray-700", bg: "bg-gray-100" };
+export default function StatusBadge({ status, size = 'md', showDot = true, className = '' }: StatusBadgeProps) {
+  const colors = STATUS_COLORS[status] || {
+    bg: 'bg-gray-100',
+    text: 'text-gray-700',
+    dot: 'bg-gray-500',
+  };
+
+  const sizeClasses = {
+    sm: 'text-xs px-2 py-0.5',
+    md: 'text-sm px-3 py-1',
+    lg: 'text-base px-4 py-1.5',
+  };
+
   return (
     <span
-      className={cn(
-        "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium",
-        config.bg,
-        config.color,
-        className
-      )}
+      className={`inline-flex items-center gap-1.5 font-medium rounded-full ${colors.bg} ${colors.text} ${sizeClasses[size]} ${className}`}
     >
+      {showDot && (
+        <span className={`w-2 h-2 rounded-full ${colors.dot} shrink-0`} />
+      )}
       {status}
     </span>
   );

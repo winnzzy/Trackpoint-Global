@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
+import { createShipment } from "@/lib/actions/shipments";
 import { SHIPMENT_STATUSES, SHIPMENT_TYPES, COUNTRIES } from "@/types";
 import { generateTrackingNumber } from "@/lib/utils";
 import { ArrowLeft, RefreshCw } from "lucide-react";
@@ -11,7 +11,6 @@ import { toast } from "sonner";
 
 export default function NewShipmentPage() {
   const router = useRouter();
-  const supabase = createClient();
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     tracking_number: generateTrackingNumber(),
@@ -45,7 +44,7 @@ export default function NewShipmentPage() {
     e.preventDefault();
     setLoading(true);
 
-    const shipmentData = {
+    const { data, error } = await createShipment({
       tracking_number: form.tracking_number,
       sender_name: form.sender_name,
       sender_phone: form.sender_phone || null,
@@ -57,41 +56,25 @@ export default function NewShipmentPage() {
       origin_city: form.origin_city,
       destination_country: form.destination_country,
       destination_city: form.destination_city,
-      shipment_type: form.shipment_type,
+      shipment_type: form.shipment_type as "Standard" | "Express" | "International" | "Same Day" | "Economy",
       package_description: form.package_description || null,
       package_weight: form.package_weight || null,
-      status: form.status,
-      current_location: form.current_location || form.origin_city,
-      shipped_at: form.shipped_at ? new Date(form.shipped_at).toISOString() : null,
-      estimated_delivery: form.estimated_delivery
-        ? new Date(form.estimated_delivery).toISOString()
-        : null,
+      status: form.status as "Pending" | "Processing" | "Shipment Created" | "Picked Up" | "In Transit" | "Customs Clearance" | "Out for Delivery" | "Delivered" | "On Hold" | "Delayed" | "Returned",
+      current_location: form.current_location || null,
+      shipped_at: form.shipped_at || null,
+      estimated_delivery: form.estimated_delivery || null,
       admin_note: form.admin_note || null,
-    };
+    });
 
-    const { data, error } = await supabase
-      .from("shipments")
-      .insert(shipmentData)
-      .select()
-      .single();
+    setLoading(false);
 
     if (error) {
-      toast.error(error.message || "Failed to create shipment");
-      setLoading(false);
+      toast.error(error);
       return;
     }
 
-    // Create initial tracking event
-    await supabase.from("tracking_events").insert({
-      shipment_id: data.id,
-      status: "Shipment Created",
-      location: form.current_location || form.origin_city,
-      note: "Shipment record created and registered in the system.",
-      event_time: new Date().toISOString(),
-    });
-
     toast.success("Shipment created successfully!");
-    router.push(`/admin/shipments/${data.id}`);
+    router.push(`/admin/shipments/${data!.id}`);
   };
 
   const inputClass =

@@ -12,7 +12,7 @@ export const shipmentFormSchema = z.object({
   origin_city: z.string().min(1, "Origin city is required"),
   destination_country: z.string().min(1, "Destination country is required"),
   destination_city: z.string().min(1, "Destination city is required"),
-  shipment_type: z.enum(["Express", "Standard", "Cargo", "Document"]),
+  shipment_type: z.enum(["Standard", "Express", "International", "Same Day", "Economy"]),
   package_description: z.string().optional().nullable(),
   package_weight: z.string().optional().nullable(),
   status: z.string().min(1, "Status is required"),

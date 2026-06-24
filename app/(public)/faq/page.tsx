@@ -1,136 +1,123 @@
-import { ChevronDown } from "lucide-react";
-import Link from "next/link";
+'use client';
+
+import { useState } from 'react';
+import Link from 'next/link';
 
 const faqs = [
   {
-    category: "Tracking",
-    questions: [
-      {
-        q: "How do I track my shipment?",
-        a: "Visit our tracking page and enter your tracking number in the search box. You will see the current status, location, and full timeline of your shipment. You can also find direct tracking links in your shipment confirmation email.",
-      },
-      {
-        q: "My tracking number is not working. What should I do?",
-        a: "Tracking numbers may take up to 24 hours to become active after a shipment is registered. If your tracking number still does not work after this period, please double-check the number for typos and contact our support team for assistance.",
-      },
-      {
-        q: "How often is tracking information updated?",
-        a: "Tracking information is updated at every major checkpoint including pickup, sorting facility arrival, customs clearance, transit hubs, and delivery. Updates typically appear within 1–4 hours of each event.",
-      },
-    ],
+    question: 'How do I track my shipment?',
+    answer: 'Visit our tracking page and enter the tracking number provided in your shipping confirmation email. Your tracking number starts with TPG- followed by the year and a unique number (e.g., TPG-2026-00147). You\'ll see real-time updates including current location, status, and estimated delivery date.',
   },
   {
-    category: "Shipping",
-    questions: [
-      {
-        q: "What items can I ship with TrackPoint Global?",
-        a: "You can ship documents, parcels, electronics, clothing, personal items, and commercial goods. However, we do not ship hazardous materials, weapons, perishable goods without proper packaging, or items prohibited by the destination country's customs regulations.",
-      },
-      {
-        q: "How long does international shipping take?",
-        a: "International shipping times vary by destination and service level. Express shipping typically takes 1–3 business days, while standard international delivery takes 5–10 business days. Cargo and freight shipments may take 2–4 weeks depending on the route.",
-      },
-      {
-        q: "Do you offer door-to-door pickup?",
-        a: "Yes, we offer doorstep pickup services in major cities across Nigeria and select partner countries. You can schedule a pickup through our website or by contacting our support team directly.",
-      },
-      {
-        q: "How is shipping cost calculated?",
-        a: "Shipping costs are calculated based on the package weight, dimensions, destination country, and the selected service level (express, standard, or cargo). Contact us for a detailed quote for your specific shipment.",
-      },
-    ],
+    question: 'How long does international shipping take?',
+    answer: 'International shipping times vary by destination and service level. Express shipments typically take 1–3 business days, while standard international delivery takes 5–10 business days. Customs clearance at the destination country may add additional time. We provide estimated delivery dates when you book your shipment.',
   },
   {
-    category: "Customs & Duties",
-    questions: [
-      {
-        q: "Do I need to pay customs duties?",
-        a: "Customs duties and import taxes are determined by the destination country's regulations and are the responsibility of the receiver. We provide customs documentation support and can advise on estimated duties for specific destinations.",
-      },
-      {
-        q: "Can you handle customs clearance for me?",
-        a: "Yes, our team handles customs documentation and clearance as part of our international shipping service. We prepare all necessary paperwork and coordinate with customs authorities to ensure smooth clearance.",
-      },
-    ],
+    question: 'How long does domestic delivery take?',
+    answer: 'Domestic deliveries within Nigeria typically take 1–3 business days depending on the origin and destination cities. Same-city deliveries can often be completed within 24 hours. Express domestic options are available for time-sensitive shipments.',
   },
   {
-    category: "Business & Account",
-    questions: [
-      {
-        q: "Do you offer bulk or business shipping rates?",
-        a: "Yes, we offer competitive volume-based rates for businesses with regular shipping needs. Contact our business team to discuss your requirements and get a customized pricing plan.",
-      },
-      {
-        q: "Can I integrate TrackPoint Global with my e-commerce platform?",
-        a: "Yes, we offer API integration for e-commerce platforms and online stores. Our technical team can assist with setup and provide documentation for seamless integration with your existing systems.",
-      },
-      {
-        q: "Do you provide shipping insurance?",
-        a: "Yes, all shipments include basic coverage. For high-value items, we offer additional insurance options at competitive rates. We recommend declaring the full value of your shipment and opting for comprehensive coverage.",
-      },
-    ],
+    question: 'What happens if my package is delayed?',
+    answer: 'If your shipment experiences a delay, our tracking system will update with the current status and reason. Common delays include weather disruptions, customs inspections, or transit hub congestion. If your shipment is delayed beyond the estimated delivery date, please contact our support team and we will investigate immediately.',
+  },
+  {
+    question: 'Can I send both documents and parcels?',
+    answer: 'Yes, we handle a wide range of shipments including documents, parcels, packages, and commercial goods. For documents, we offer secure sealed packaging with chain-of-custody tracking. For parcels, we provide various size and weight options. All shipments include real-time tracking regardless of type.',
+  },
+  {
+    question: 'Do you handle customs clearance for international shipments?',
+    answer: 'Yes, our customs and cross-border support team handles all documentation and clearance processes for international shipments. We prepare customs declarations, advise on duties and taxes, and work with our broker partners to ensure smooth clearance. Some items may be subject to import restrictions depending on the destination country.',
+  },
+  {
+    question: 'How do I contact support about my shipment?',
+    answer: 'You can reach our support team by email at support@trackpointglobal.com, by phone at +234 800 555 0199, or through the contact form on our Contact page. Our team is available Monday–Friday 8 AM–6 PM and Saturday 9 AM–2 PM (WAT). For urgent queries, we recommend calling directly.',
+  },
+  {
+    question: 'What items can I ship internationally?',
+    answer: 'We ship a wide variety of items including electronics, clothing, documents, artisan goods, and commercial products. However, certain items are restricted or prohibited for international shipping, including hazardous materials, perishable goods (without special handling), and items restricted by the destination country. Contact us if you\'re unsure about a specific item.',
+  },
+  {
+    question: 'Is my package insured during shipping?',
+    answer: 'All shipments include basic coverage. For high-value items, we recommend purchasing additional shipping insurance at the time of booking. Insurance coverage includes loss, damage, and theft during transit. Our support team can provide details on coverage limits and pricing for your specific shipment.',
+  },
+  {
+    question: 'Can I change the delivery address after shipping?',
+    answer: 'Address changes may be possible depending on the shipment\'s current status and location. If the package has not yet been dispatched from the origin, we can update the address directly. For packages already in transit, we will do our best to accommodate the change, though additional fees may apply. Contact support as soon as possible to request a change.',
   },
 ];
 
 export default function FAQPage() {
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
+
   return (
     <>
       {/* Hero */}
-      <section className="bg-navy text-white py-20">
+      <section className="bg-gradient-to-br from-blue-600 to-blue-800 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            Frequently Asked Questions
-          </h1>
-          <p className="text-gray-300 text-lg max-w-2xl mx-auto">
+          <h1 className="text-4xl sm:text-5xl font-bold text-white mb-6">Frequently Asked Questions</h1>
+          <p className="text-xl text-blue-100 max-w-3xl mx-auto">
             Find answers to common questions about our shipping, tracking, and delivery services.
           </p>
         </div>
       </section>
 
       {/* FAQs */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          {faqs.map((category) => (
-            <div key={category.category}>
-              <h2 className="text-xl font-bold text-navy mb-6 pb-2 border-b border-gray-200">
-                {category.category}
-              </h2>
-              <div className="space-y-4">
-                {category.questions.map((faq) => (
-                  <details
-                    key={faq.q}
-                    className="bg-white rounded-xl border border-gray-100 shadow-sm group"
+      <section className="py-20 bg-white">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="space-y-3">
+            {faqs.map((faq, idx) => (
+              <div
+                key={idx}
+                className="border border-gray-200 rounded-xl overflow-hidden"
+              >
+                <button
+                  onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
+                  className="w-full flex items-center justify-between px-6 py-5 text-left hover:bg-gray-50 transition"
+                >
+                  <span className="text-sm font-semibold text-gray-900 pr-4">{faq.question}</span>
+                  <svg
+                    className={`w-5 h-5 text-gray-400 shrink-0 transition-transform ${
+                      openIndex === idx ? 'rotate-180' : ''
+                    }`}
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
                   >
-                    <summary className="flex items-center justify-between p-5 cursor-pointer font-medium text-navy hover:text-orange transition-colors list-none">
-                      <span className="text-sm pr-4">{faq.q}</span>
-                      <ChevronDown className="h-5 w-5 text-gray-400 flex-shrink-0 transition-transform group-open:rotate-180" />
-                    </summary>
-                    <div className="px-5 pb-5 text-sm text-gray-600 leading-relaxed">
-                      {faq.a}
-                    </div>
-                  </details>
-                ))}
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {openIndex === idx && (
+                  <div className="px-6 pb-5">
+                    <p className="text-sm text-gray-600 leading-relaxed">{faq.answer}</p>
+                  </div>
+                )}
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="py-16 bg-white">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-2xl font-bold text-navy mb-3">
-            Still have questions?
-          </h2>
-          <p className="text-gray-600 mb-6">
-            Our support team is available to help you with any questions or concerns about your shipments.
+      {/* Still have questions */}
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-3">Still Have Questions?</h2>
+          <p className="text-gray-600 mb-8">
+            Our support team is happy to help with any questions about shipping, tracking, or our services.
           </p>
-          <Link
-            href="/contact"
-            className="bg-orange hover:bg-orange-dark text-white px-8 py-3 rounded-xl font-semibold transition-colors inline-flex items-center justify-center"
-          >
-            Contact Support
-          </Link>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link
+              href="/contact"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3 rounded-xl transition"
+            >
+              Contact Support
+            </Link>
+            <Link
+              href="/track"
+              className="text-gray-600 hover:text-gray-900 font-medium px-8 py-3 transition"
+            >
+              Track a Shipment
+            </Link>
+          </div>
         </div>
       </section>
     </>

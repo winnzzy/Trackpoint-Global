@@ -5,29 +5,26 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function generateTrackingNumber(): string {
-  const timestamp = new Date();
-  const year = timestamp.getFullYear().toString().slice(-2);
-  const month = String(timestamp.getMonth() + 1).padStart(2, "0");
-  const day = String(timestamp.getDate()).padStart(2, "0");
-  const random = Math.floor(1000 + Math.random() * 9000);
-  return `TPG-${year}${month}${day}-${random}`;
+/**
+ * Normalize a tracking number by trimming whitespace and converting to uppercase.
+ * Use consistently across public tracking, shipment creation, and lookups.
+ */
+export function normalizeTrackingNumber(value: string): string {
+  return value.trim().toUpperCase();
 }
 
-export function formatDate(date: string | Date | null): string {
-  if (!date) return "—";
-  const d = new Date(date);
-  return d.toLocaleDateString("en-US", {
+export function formatDate(dateStr: string | null): string {
+  if (!dateStr) return "—";
+  return new Date(dateStr).toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
     day: "numeric",
   });
 }
 
-export function formatDateTime(date: string | Date | null): string {
-  if (!date) return "—";
-  const d = new Date(date);
-  return d.toLocaleDateString("en-US", {
+export function formatDateTime(dateStr: string | null): string {
+  if (!dateStr) return "—";
+  return new Date(dateStr).toLocaleString("en-US", {
     year: "numeric",
     month: "short",
     day: "numeric",
@@ -36,6 +33,14 @@ export function formatDateTime(date: string | Date | null): string {
   });
 }
 
-export function toISODateString(date: Date): string {
-  return date.toISOString().split("T")[0];
+/**
+ * Generate a random tracking number in the format TP-XXXXXXXX
+ */
+export function generateTrackingNumber(): string {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let result = "TP-";
+  for (let i = 0; i < 8; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return result;
 }

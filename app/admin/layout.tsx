@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -29,24 +29,9 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [user, setUser] = useState<{ email?: string } | null>(null);
   const pathname = usePathname();
   const router = useRouter();
   const supabase = createClient();
-
-  useEffect(() => {
-    const getUser = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user && pathname !== "/admin/login") {
-        router.push("/admin/login");
-      } else {
-        setUser(user);
-      }
-    };
-    getUser();
-  }, [pathname, router, supabase.auth]);
 
   // Don't show admin shell on login page
   if (pathname === "/admin/login") {
@@ -135,11 +120,8 @@ export default function AdminLayout({
           </button>
           <div className="flex-1" />
           <div className="flex items-center gap-3">
-            <span className="text-sm text-gray-600 hidden sm:block">
-              {user?.email || "Admin"}
-            </span>
             <div className="w-8 h-8 rounded-full bg-orange text-white flex items-center justify-center text-sm font-semibold">
-              {(user?.email?.[0] || "A").toUpperCase()}
+              A
             </div>
           </div>
         </header>
