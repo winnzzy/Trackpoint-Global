@@ -50,16 +50,14 @@ export async function GET(
         id,
         type,
         title,
-        description,
         customer_message,
         severity,
         location,
         updated_eta,
         action_required,
         action_label,
-        action_url,
         reported_at,
-        resolved_at
+        status
       )
     `)
     .eq('tracking_number', normalized)
@@ -77,17 +75,29 @@ export async function GET(
     );
   }
 
-  // Filter out resolved exceptions for public view — only show active ones
-  const shipmentWithExceptions = shipment as typeof shipment & {
-    exceptions: typeof shipment.shipment_exceptions;
-  };
-  if (shipmentWithExceptions.shipment_exceptions) {
-    shipmentWithExceptions.exceptions = shipmentWithExceptions.shipment_exceptions.filter(
-      (e: { resolved_at: string | null }) => !e.resolved_at
-    );
-  } else {
-    shipmentWithExceptions.exceptions = [];
-  }
+  // Filter active exceptions only for public view and exclude internal fields
+  const activeExceptions = (shipment.shipment_exceptions || [])
+    .filter((e: { status: string }) => e.status === 'active')
+    .map((e: Record<string, unknown>) => ({
+      id: e.id,
+      type: e.type,
+      title: e.title,
+      customer_message: e.customer_message,
+      severity: e.severity,
+      location: e.location,
+      updated_eta: e.updated_eta,
+      action_required: e.action_required,
+      action_label: e.action_label,
+      reported_at: e.reported_at,
+    }));
 
-  return NextResponse.json({ shipment });
+  // Remove the raw join key from the response
+  const { shipment_exceptions: _, ...shipmentData } = shipment as Record<string, unknown>;
+
+  return NextResponse.json({
+    shipment: {
+      ...shipmentData,
+      exceptions: activeExceptions,
+    },
+  });
 }

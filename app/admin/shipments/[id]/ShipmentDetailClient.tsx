@@ -21,6 +21,7 @@ import {
   updateShipment,
   addTrackingEvent,
   createException,
+  updateException,
   resolveException,
   deleteException,
 } from "@/lib/actions/shipments";
@@ -95,6 +96,8 @@ export default function ShipmentDetailClient({
   const [exceptions, setExceptions] = useState<ShipmentException[]>(initialExceptions);
   const [showExceptionForm, setShowExceptionForm] = useState(false);
   const [creatingException, setCreatingException] = useState(false);
+  const [editingExceptionId, setEditingExceptionId] = useState<string | null>(null);
+  const [updatingException, setUpdatingException] = useState(false);
   const [exceptionForm, setExceptionForm] = useState({
     type: "delay" as string,
     severity: "warning" as string,
@@ -216,6 +219,53 @@ export default function ShipmentDetailClient({
       setExceptions((prev) => prev.map((ex) => ex.id === exceptionId ? { ...ex, status: "resolved", resolved_at: new Date().toISOString() } : ex));
       router.refresh();
     }
+  };
+
+  const handleStartEditException = (ex: ShipmentException) => {
+    setEditingExceptionId(ex.id);
+    setExceptionForm({
+      type: ex.type || "delay",
+      severity: ex.severity || "warning",
+      title: ex.title || "",
+      customer_message: ex.customer_message || "",
+      location: ex.location || "",
+      action_required: ex.action_required || false,
+      action_label: ex.action_label || "",
+      updated_eta: ex.updated_eta ? ex.updated_eta.slice(0, 16) : "",
+      internal_note: ex.internal_note || "",
+    });
+  };
+
+  const handleCancelEditException = () => {
+    setEditingExceptionId(null);
+    setExceptionForm({ type: "delay", severity: "warning", title: "", customer_message: "", location: "", action_required: false, action_label: "", updated_eta: "", internal_note: "" });
+  };
+
+  const handleUpdateException = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingExceptionId) return;
+    setUpdatingException(true);
+    const { data, error } = await updateException(editingExceptionId, {
+      type: exceptionForm.type as any,
+      severity: exceptionForm.severity as any,
+      title: exceptionForm.title,
+      customer_message: exceptionForm.customer_message || null,
+      location: exceptionForm.location || null,
+      action_required: exceptionForm.action_required,
+      action_label: exceptionForm.action_required ? exceptionForm.action_label || null : null,
+      updated_eta: exceptionForm.updated_eta || null,
+      internal_note: exceptionForm.internal_note || null,
+    });
+    if (error) {
+      toast.error(error);
+    } else {
+      toast.success("Exception updated");
+      if (data) setExceptions((prev) => prev.map((ex) => ex.id === editingExceptionId ? { ...ex, ...(data as ShipmentException) } : ex));
+      setEditingExceptionId(null);
+      setExceptionForm({ type: "delay", severity: "warning", title: "", customer_message: "", location: "", action_required: false, action_label: "", updated_eta: "", internal_note: "" });
+      router.refresh();
+    }
+    setUpdatingException(false);
   };
 
   const handleDeleteException = async (exceptionId: string) => {
@@ -559,41 +609,105 @@ export default function ShipmentDetailClient({
               <div className="space-y-3 mb-4">
                 {activeExceptions.map((ex) => (
                   <div key={ex.id} className="border border-red-200 bg-red-50/50 rounded-xl p-4">
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="flex items-start gap-2.5 min-w-0">
-                        {getSeverityIcon(ex.severity)}
-                        <div className="min-w-0">
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <p className="font-semibold text-sm text-navy">{ex.title}</p>
-                            <span className={`inline-flex px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase border ${getSeverityBadge(ex.severity)}`}>
-                              {ex.severity}
-                            </span>
-                            <span className="text-[10px] font-medium text-gray-500 bg-white px-1.5 py-0.5 rounded border border-gray-200">
-                              {EXCEPTION_TYPE_LABELS[ex.type as keyof typeof EXCEPTION_TYPE_LABELS] || ex.type}
-                            </span>
+                    {editingExceptionId === ex.id ? (
+                      /* Inline Edit Form */
+                      <form onSubmit={handleUpdateException} className="space-y-3">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <div>
+                            <label className={labelClass}>Type *</label>
+                            <select value={exceptionForm.type} onChange={(e) => setExceptionForm((p) => ({ ...p, type: e.target.value }))} className={inputClass}>
+                              {EXCEPTION_TYPES.map((t) => <option key={t} value={t}>{EXCEPTION_TYPE_LABELS[t]}</option>)}
+                            </select>
                           </div>
-                          {ex.customer_message && <p className="text-xs text-gray-600 mt-1">{ex.customer_message}</p>}
-                          <div className="flex items-center gap-3 mt-2 text-[11px] text-gray-500">
-                            {ex.location && <span>📍 {ex.location}</span>}
-                            {ex.updated_eta && <span>⏱ New ETA: {formatDate(ex.updated_eta)}</span>}
-                            {ex.action_required && <span className="text-red-600 font-medium">⚠ Action required{ex.action_label ? `: ${ex.action_label}` : ""}</span>}
+                          <div>
+                            <label className={labelClass}>Severity *</label>
+                            <select value={exceptionForm.severity} onChange={(e) => setExceptionForm((p) => ({ ...p, severity: e.target.value }))} className={inputClass}>
+                              {EXCEPTION_SEVERITIES.map((s) => <option key={s} value={s}>{EXCEPTION_SEVERITY_LABELS[s]}</option>)}
+                            </select>
                           </div>
-                          {ex.internal_note && (
-                            <p className="mt-2 text-[11px] text-gray-500 bg-yellow-50 border border-yellow-200 rounded px-2 py-1.5">
-                              <span className="font-semibold">Internal:</span> {ex.internal_note}
-                            </p>
-                          )}
+                        </div>
+                        <div>
+                          <label className={labelClass}>Title *</label>
+                          <input value={exceptionForm.title} onChange={(e) => setExceptionForm((p) => ({ ...p, title: e.target.value }))} className={inputClass} required />
+                        </div>
+                        <div>
+                          <label className={labelClass}>Customer Message</label>
+                          <textarea value={exceptionForm.customer_message} onChange={(e) => setExceptionForm((p) => ({ ...p, customer_message: e.target.value }))} className={`${inputClass} min-h-[60px]`} />
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <div>
+                            <label className={labelClass}>Location</label>
+                            <input value={exceptionForm.location} onChange={(e) => setExceptionForm((p) => ({ ...p, location: e.target.value }))} className={inputClass} />
+                          </div>
+                          <div>
+                            <label className={labelClass}>Updated ETA</label>
+                            <input type="datetime-local" value={exceptionForm.updated_eta} onChange={(e) => setExceptionForm((p) => ({ ...p, updated_eta: e.target.value }))} className={inputClass} />
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <input type="checkbox" id="edit_action_required" checked={exceptionForm.action_required} onChange={(e) => setExceptionForm((p) => ({ ...p, action_required: e.target.checked }))} className="rounded border-gray-300 text-orange focus:ring-orange" />
+                          <label htmlFor="edit_action_required" className="text-sm text-gray-700">Customer action required</label>
+                        </div>
+                        {exceptionForm.action_required && (
+                          <div>
+                            <label className={labelClass}>Action Button Label</label>
+                            <input value={exceptionForm.action_label} onChange={(e) => setExceptionForm((p) => ({ ...p, action_label: e.target.value }))} className={inputClass} />
+                          </div>
+                        )}
+                        <div>
+                          <label className={labelClass}>Internal Note (admin only)</label>
+                          <textarea value={exceptionForm.internal_note} onChange={(e) => setExceptionForm((p) => ({ ...p, internal_note: e.target.value }))} className={`${inputClass} min-h-[50px]`} />
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button type="submit" disabled={updatingException} className="bg-orange hover:bg-orange-dark disabled:opacity-60 text-white px-4 py-2 rounded-xl text-sm font-medium transition-colors">
+                            {updatingException ? "Saving..." : "Save Changes"}
+                          </button>
+                          <button type="button" onClick={handleCancelEditException} className="px-4 py-2 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors border border-gray-200">
+                            Cancel
+                          </button>
+                        </div>
+                      </form>
+                    ) : (
+                      /* Display Mode */
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex items-start gap-2.5 min-w-0">
+                          {getSeverityIcon(ex.severity)}
+                          <div className="min-w-0">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <p className="font-semibold text-sm text-navy">{ex.title}</p>
+                              <span className={`inline-flex px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase border ${getSeverityBadge(ex.severity)}`}>
+                                {ex.severity}
+                              </span>
+                              <span className="text-[10px] font-medium text-gray-500 bg-white px-1.5 py-0.5 rounded border border-gray-200">
+                                {EXCEPTION_TYPE_LABELS[ex.type as keyof typeof EXCEPTION_TYPE_LABELS] || ex.type}
+                              </span>
+                            </div>
+                            {ex.customer_message && <p className="text-xs text-gray-600 mt-1">{ex.customer_message}</p>}
+                            <div className="flex items-center gap-3 mt-2 text-[11px] text-gray-500">
+                              {ex.location && <span>📍 {ex.location}</span>}
+                              {ex.updated_eta && <span>⏱ New ETA: {formatDate(ex.updated_eta)}</span>}
+                              {ex.action_required && <span className="text-red-600 font-medium">⚠ Action required{ex.action_label ? `: ${ex.action_label}` : ""}</span>}
+                            </div>
+                            {ex.internal_note && (
+                              <p className="mt-2 text-[11px] text-gray-500 bg-yellow-50 border border-yellow-200 rounded px-2 py-1.5">
+                                <span className="font-semibold">Internal:</span> {ex.internal_note}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-1 shrink-0">
+                          <button onClick={() => handleStartEditException(ex)} className="p-1.5 rounded-lg text-blue-500 hover:bg-blue-50 transition-colors" title="Edit">
+                            <Save className="h-4 w-4" />
+                          </button>
+                          <button onClick={() => handleResolveException(ex.id)} className="p-1.5 rounded-lg text-green-600 hover:bg-green-50 transition-colors" title="Resolve">
+                            <CheckCircle2 className="h-4 w-4" />
+                          </button>
+                          <button onClick={() => handleDeleteException(ex.id)} className="p-1.5 rounded-lg text-red-500 hover:bg-red-50 transition-colors" title="Delete">
+                            <Trash2 className="h-4 w-4" />
+                          </button>
                         </div>
                       </div>
-                      <div className="flex items-center gap-1 shrink-0">
-                        <button onClick={() => handleResolveException(ex.id)} className="p-1.5 rounded-lg text-green-600 hover:bg-green-50 transition-colors" title="Resolve">
-                          <CheckCircle2 className="h-4 w-4" />
-                        </button>
-                        <button onClick={() => handleDeleteException(ex.id)} className="p-1.5 rounded-lg text-red-500 hover:bg-red-50 transition-colors" title="Delete">
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                      </div>
-                    </div>
+                    )}
                   </div>
                 ))}
               </div>

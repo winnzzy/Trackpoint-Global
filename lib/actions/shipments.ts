@@ -548,6 +548,54 @@ export async function createException(
 }
 
 /**
+ * Update an active exception (admin server action).
+ */
+export async function updateException(
+  exceptionId: string,
+  formData: ExceptionFormValues
+) {
+  const supabase = await createClient();
+
+  const parsed = exceptionFormSchema.safeParse(formData);
+  if (!parsed.success) {
+    const messages = parsed.error.issues.map((i: { message: string }) => i.message).join(", ");
+    return { data: null, error: messages };
+  }
+
+  const values = parsed.data;
+  const emptyToNull = (v: string | null | undefined) =>
+    v && v.trim() !== "" ? v.trim() : null;
+
+  const updatePayload = {
+    type: values.type,
+    severity: values.severity,
+    title: values.title.trim(),
+    customer_message: emptyToNull(values.customer_message),
+    location: emptyToNull(values.location),
+    action_required: values.action_required,
+    action_label: values.action_required ? emptyToNull(values.action_label) : null,
+    updated_eta: values.updated_eta
+      ? new Date(values.updated_eta).toISOString()
+      : null,
+    internal_note: emptyToNull(values.internal_note),
+  };
+
+  const { data, error } = await supabase
+    .from("shipment_exceptions")
+    .update(updatePayload)
+    .eq("id", exceptionId)
+    .select()
+    .single();
+
+  if (error) {
+    return { data: null, error: error.message };
+  }
+
+  revalidatePath("/admin/shipments/" + data.shipment_id);
+  return { data, error: null };
+}
+
+/**
  * Resolve an exception (admin server action).
  */
 export async function resolveException(exceptionId: string) {
