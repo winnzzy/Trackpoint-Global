@@ -18,18 +18,26 @@ export default async function ShipmentDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  // Fetch tracking events server-side
+  // Fetch tracking events and exceptions server-side
   const supabase = await createClient();
-  const { data: events } = await supabase
-    .from("tracking_events")
-    .select("*")
-    .eq("shipment_id", id)
-    .order("event_time", { ascending: true });
+  const [{ data: events }, { data: exceptions }] = await Promise.all([
+    supabase
+      .from("tracking_events")
+      .select("*")
+      .eq("shipment_id", id)
+      .order("event_time", { ascending: true }),
+    supabase
+      .from("shipment_exceptions")
+      .select("*")
+      .eq("shipment_id", id)
+      .order("reported_at", { ascending: false }),
+  ]);
 
   return (
     <ShipmentDetailClient
       shipment={shipment}
       trackingEvents={events || []}
+      exceptions={exceptions || []}
     />
   );
 }

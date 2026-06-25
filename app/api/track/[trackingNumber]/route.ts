@@ -45,6 +45,21 @@ export async function GET(
         location,
         note,
         event_time
+      ),
+      shipment_exceptions (
+        id,
+        type,
+        title,
+        description,
+        customer_message,
+        severity,
+        location,
+        updated_eta,
+        action_required,
+        action_label,
+        action_url,
+        reported_at,
+        resolved_at
       )
     `)
     .eq('tracking_number', normalized)
@@ -60,6 +75,18 @@ export async function GET(
       (a: { event_time: string }, b: { event_time: string }) =>
         new Date(a.event_time).getTime() - new Date(b.event_time).getTime()
     );
+  }
+
+  // Filter out resolved exceptions for public view — only show active ones
+  const shipmentWithExceptions = shipment as typeof shipment & {
+    exceptions: typeof shipment.shipment_exceptions;
+  };
+  if (shipmentWithExceptions.shipment_exceptions) {
+    shipmentWithExceptions.exceptions = shipmentWithExceptions.shipment_exceptions.filter(
+      (e: { resolved_at: string | null }) => !e.resolved_at
+    );
+  } else {
+    shipmentWithExceptions.exceptions = [];
   }
 
   return NextResponse.json({ shipment });

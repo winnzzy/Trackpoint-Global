@@ -226,3 +226,70 @@ INSERT INTO tracking_events (shipment_id, status, location, note, event_time) VA
   ('07a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3b4c', 'Picked Up', 'Seattle, United States', 'Package collected from sender at Capitol Hill, Seattle.', '2026-06-19T17:30:00Z'),
   ('07a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3b4c', 'Departed Origin', 'Seattle-Tacoma Int''l Airport', 'Shipment departed Seattle for Tokyo Narita. Flight JL-0069.', '2026-06-20T23:00:00Z'),
   ('07a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3b4c', 'In Transit', 'Tokyo Narita Airport, Japan', 'Shipment arrived at Narita Int''l Airport. Awaiting customs clearance.', '2026-06-22T06:15:00Z');
+
+-- ============================================================
+-- Shipment Exceptions
+-- ============================================================
+
+-- Shipment 2 (NY → Dubai): Customs clearance delay (critical)
+INSERT INTO shipment_exceptions (
+  shipment_id, type, title, description, customer_message,
+  severity, location, updated_eta,
+  action_required, action_label, action_url,
+  reported_at
+) VALUES (
+  'b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e',
+  'customs_delay',
+  'Customs Clearance Delayed',
+  'Shipment is undergoing extended inspection by Dubai Customs due to documentation requirements for high-value fashion items. Additional import permits may be required.',
+  'Your shipment is currently being held at Dubai Customs for additional inspection. This may result in a delivery delay of 3–5 business days. Our team is working with customs authorities to expedite clearance.',
+  'critical',
+  'Dubai, UAE',
+  '2026-06-28T18:00:00Z',
+  true,
+  'Contact Support for Assistance',
+  '/contact',
+  '2026-06-22T16:00:00Z'
+);
+
+-- Shipment 5 (Miami → Accra): Weather delay (warning)
+INSERT INTO shipment_exceptions (
+  shipment_id, type, title, description, customer_message,
+  severity, location, updated_eta,
+  action_required, action_label, action_url,
+  reported_at
+) VALUES (
+  'e5f6a7b8-c9d0-4e1f-2a3b-4c5d6e7f8091',
+  'weather_delay',
+  'Transit Delayed by Weather',
+  'Severe storms in the Nairobi region caused flight cancellations affecting this shipment. The package is safe and secure at the Nairobi hub awaiting the next available flight.',
+  'Your shipment experienced a weather-related delay while transiting through Nairobi. It has since resumed transit and is now en route to Accra. We expect to deliver within the updated timeframe.',
+  'warning',
+  'Nairobi, Kenya',
+  '2026-06-22T18:00:00Z',
+  false,
+  NULL,
+  NULL,
+  '2026-06-15T18:00:00Z'
+);
+
+-- Shipment 7 (Seattle → Tokyo): Customs processing notice (info)
+INSERT INTO shipment_exceptions (
+  shipment_id, type, title, description, customer_message,
+  severity, location, updated_eta,
+  action_required, action_label, action_url,
+  reported_at
+) VALUES (
+  '07a1b2c3-d4e5-4f6a-7b8c-9d0e1f2a3b4c',
+  'customs_delay',
+  'Processing at Japanese Customs',
+  'Shipment is being processed through Japan Customs at Narita International Airport. Standard processing time for electronics is 1–2 business days.',
+  'Your shipment has arrived in Tokyo and is currently being processed through Japanese Customs. This is a standard procedure for electronics shipments and typically takes 1–2 business days.',
+  'info',
+  'Tokyo Narita Airport, Japan',
+  NULL,
+  false,
+  NULL,
+  NULL,
+  '2026-06-22T08:00:00Z'
+);

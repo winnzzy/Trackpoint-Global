@@ -105,6 +105,71 @@ export const COUNTRIES = [
   'Ghana',
 ] as const;
 
+export type ExceptionType =
+  | 'delay'
+  | 'customs_hold'
+  | 'address_issue'
+  | 'failed_delivery_attempt'
+  | 'weather_disruption'
+  | 'security_review'
+  | 'documentation_review'
+  | 'other';
+
+export type ExceptionSeverity = 'info' | 'warning' | 'critical';
+export type ExceptionStatus = 'active' | 'resolved';
+
+export const EXCEPTION_TYPES: ExceptionType[] = [
+  'delay',
+  'customs_hold',
+  'address_issue',
+  'failed_delivery_attempt',
+  'weather_disruption',
+  'security_review',
+  'documentation_review',
+  'other',
+];
+
+export const EXCEPTION_TYPE_LABELS: Record<ExceptionType, string> = {
+  delay: 'Delay',
+  customs_hold: 'Customs Hold',
+  address_issue: 'Address Issue',
+  failed_delivery_attempt: 'Failed Delivery Attempt',
+  weather_disruption: 'Weather Disruption',
+  security_review: 'Security Review',
+  documentation_review: 'Documentation Review',
+  other: 'Other',
+};
+
+export const EXCEPTION_SEVERITIES: ExceptionSeverity[] = ['info', 'warning', 'critical'];
+
+export const EXCEPTION_SEVERITY_LABELS: Record<ExceptionSeverity, string> = {
+  info: 'Informational',
+  warning: 'Warning',
+  critical: 'Critical',
+};
+
+export interface ShipmentException {
+  id: string;
+  shipment_id: string;
+  type: ExceptionType;
+  severity: ExceptionSeverity;
+  status: ExceptionStatus;
+  title: string;
+  customer_message: string | null;
+  location: string | null;
+  action_required: boolean;
+  action_label: string | null;
+  updated_eta: string | null;
+  reported_at: string;
+  resolved_at: string | null;
+  internal_note: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+/** Safe public-facing exception — no internal_note */
+export type PublicShipmentException = Omit<ShipmentException, 'internal_note'>;
+
 export const STATUS_COLORS: Record<string, { bg: string; text: string; dot: string }> = {
   'Shipment Created': { bg: 'bg-slate-100', text: 'text-slate-700', dot: 'bg-slate-500' },
   'Picked Up': { bg: 'bg-blue-100', text: 'text-blue-700', dot: 'bg-blue-500' },

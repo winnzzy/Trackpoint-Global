@@ -27,6 +27,13 @@
   --animate-progress-fill: progress-fill 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   --animate-dot-pulse: dot-pulse 2s ease-in-out infinite;
   --animate-timeline-node: timeline-node 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-float-delayed: float 6s ease-in-out infinite 3s;
+  --animate-ping-slow: ping-slow 3s cubic-bezier(0, 0, 0.2, 1) infinite;
+  --animate-slide-up: slide-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  --animate-count-up: count-up 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  --animate-route-dash: route-dash 20s linear infinite;
+  --animate-scan-line: scan-line 3s ease-in-out infinite;
 }
 
 /* Base styles */
@@ -171,6 +178,66 @@ html {
   }
 }
 
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes ping-slow {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes count-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes route-dash {
+  0% {
+    stroke-dashoffset: 1000;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes scan-line {
+  0%, 100% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(100%);
+  }
+}
+
 /* ─── Reusable Animation Utilities ─── */
 
 .anim-hidden {
@@ -235,11 +302,12 @@ html {
 
 /* Tracking result card hover */
 .tracking-card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.25s ease;
 }
 .tracking-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 10px -5px rgba(0, 0, 0, 0.04);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.08), 0 4px 12px -4px rgba(0, 0, 0, 0.04);
+  border-color: rgba(148, 163, 184, 0.3);
 }
 
 /* Timeline event hover */
@@ -249,4 +317,83 @@ html {
 .timeline-event:hover {
   background-color: rgba(249, 250, 251, 0.8);
   transform: translateX(4px);
+}
+
+/* Hero route line animation */
+.hero-route-line {
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 40%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0.3) 60%, transparent 100%);
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+/* Copy button success flash */
+.copy-flash {
+  animation: scale-in 0.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Decorative floating shapes */
+.floating-shape {
+  animation: var(--animate-float);
+}
+
+/* Hero decorative dots */
+.hero-dot-grid {
+  background-image: radial-gradient(circle, rgba(255,255,255,0.12) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Premium card with subtle gradient border */
+.premium-card {
+  position: relative;
+  background: white;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+.premium-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #3b82f6, #6366f1, #8b5cf6);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.premium-card:hover::before {
+  opacity: 1;
+}
+
+/* Section divider with icon */
+.section-icon-ring {
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.08);
+}
+
+/* Route arrow animation */
+.route-arrow-pulse {
+  animation: dot-pulse 2s ease-in-out infinite;
+}
+
+/* Countdown / ETA urgency */
+.eta-urgent {
+  animation: glow 1.5s ease-in-out infinite;
+  color: #f59e0b;
+}
+
+/* Progress bar glow for active state */
+.progress-active-glow {
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.3), 0 0 4px rgba(59, 130, 246, 0.2);
+}
+
+/* Hero scan line effect */
+.hero-scan::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+  animation: scan-line 4s ease-in-out infinite;
+  pointer-events: none;
 }

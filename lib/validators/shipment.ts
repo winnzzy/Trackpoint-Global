@@ -29,5 +29,31 @@ export const trackingEventSchema = z.object({
   event_time: z.string().min(1, "Event time is required"),
 });
 
+export const exceptionFormSchema = z.object({
+  type: z.enum([
+    'delay',
+    'customs_hold',
+    'address_issue',
+    'failed_delivery_attempt',
+    'weather_disruption',
+    'security_review',
+    'documentation_review',
+    'other',
+  ]),
+  severity: z.enum(['info', 'warning', 'critical']),
+  title: z.string().min(1, 'Title is required'),
+  customer_message: z.string().optional().nullable(),
+  location: z.string().optional().nullable(),
+  action_required: z.boolean().default(false),
+  action_label: z.string().optional().nullable(),
+  updated_eta: z.string().optional().nullable(),
+  internal_note: z.string().optional().nullable(),
+});
+
+export const resolveExceptionSchema = z.object({
+  resolved_at: z.string().optional(),
+});
+
 export type ShipmentFormValues = z.infer<typeof shipmentFormSchema>;
 export type TrackingEventFormValues = z.infer<typeof trackingEventSchema>;
+export type ExceptionFormValues = z.infer<typeof exceptionFormSchema>;

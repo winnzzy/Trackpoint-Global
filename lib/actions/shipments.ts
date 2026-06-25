@@ -7,8 +7,10 @@ import { normalizeTrackingNumber, generateTrackingNumber } from "@/lib/utils";
 import {
   shipmentFormSchema,
   trackingEventSchema,
+  exceptionFormSchema,
   type ShipmentFormValues,
   type TrackingEventFormValues,
+  type ExceptionFormValues,
 } from "@/lib/validators/shipment";
 
 // ============================================================
@@ -35,6 +37,7 @@ export async function getPublicShipmentByTrackingNumber(
     .from("shipments")
     .select(
       `
+      id,
       tracking_number,
       sender_name,
       receiver_name,
@@ -73,6 +76,16 @@ export async function getPublicShipmentByTrackingNumber(
       new Date(a.event_time).getTime() - new Date(b.event_time).getTime()
   );
 
+  // Fetch active exceptions for this shipment (public-safe fields only, no internal_note)
+  const { data: publicExceptions } = await supabase
+    .from("shipment_exceptions")
+    .select(
+      "id, type, severity, status, title, customer_message, location, action_required, action_label, updated_eta, reported_at"
+    )
+    .eq("shipment_id", shipment.id)
+    .eq("status", "active")
+    .order("reported_at", { ascending: false });
+
   return {
     data: {
       tracking_number: shipment.tracking_number,
@@ -92,6 +105,7 @@ export async function getPublicShipmentByTrackingNumber(
       delivered_at: shipment.delivered_at,
       created_at: shipment.created_at,
       tracking_events: events,
+      exceptions: publicExceptions || [],
     },
     error: null,
   };
@@ -458,5 +472,120 @@ export async function deleteShipment(id: string) {
   revalidatePath("/admin");
   revalidatePath("/admin/shipments");
 
+  return { error: null };
+}
+
+// ============================================================
+// ADMIN: EXCEPTION CRUD
+// ============================================================
+
+/**
+ * Get all exceptions for a shipment (admin).
+ */
+export async function getExceptionsForShipment(shipmentId: string) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("shipment_exceptions")
+    .select("*")
+    .eq("shipment_id", shipmentId)
+    .order("reported_at", { ascending: false });
+
+  if (error) {
+    return { data: [], error: error.message };
+  }
+
+  return { data: data || [], error: null };
+}
+
+/**
+ * Create a new exception for a shipment (admin server action).
+ */
+export async function createException(
+  shipmentId: string,
+  formData: ExceptionFormValues
+) {
+  const supabase = await createClient();
+
+  const parsed = exceptionFormSchema.safeParse(formData);
+  if (!parsed.success) {
+    const messages = parsed.error.issues.map((i: { message: string }) => i.message).join(", ");
+    return { data: null, error: messages };
+  }
+
+  const values = parsed.data;
+  const emptyToNull = (v: string | null | undefined) =>
+    v && v.trim() !== "" ? v.trim() : null;
+
+  const insertPayload = {
+    shipment_id: shipmentId,
+    type: values.type,
+    severity: values.severity,
+    status: "active" as const,
+    title: values.title.trim(),
+    customer_message: emptyToNull(values.customer_message),
+    location: emptyToNull(values.location),
+    action_required: values.action_required,
+    action_label: values.action_required ? emptyToNull(values.action_label) : null,
+    updated_eta: values.updated_eta
+      ? new Date(values.updated_eta).toISOString()
+      : null,
+    internal_note: emptyToNull(values.internal_note),
+  };
+
+  const { data, error } = await supabase
+    .from("shipment_exceptions")
+    .insert(insertPayload)
+    .select()
+    .single();
+
+  if (error) {
+    return { data: null, error: error.message };
+  }
+
+  revalidatePath("/admin/shipments/" + shipmentId);
+  return { data, error: null };
+}
+
+/**
+ * Resolve an exception (admin server action).
+ */
+export async function resolveException(exceptionId: string) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("shipment_exceptions")
+    .update({
+      status: "resolved",
+      resolved_at: new Date().toISOString(),
+    })
+    .eq("id", exceptionId)
+    .select()
+    .single();
+
+  if (error) {
+    return { data: null, error: error.message };
+  }
+
+  revalidatePath("/admin/shipments/" + data.shipment_id);
+  return { data, error: null };
+}
+
+/**
+ * Delete an exception (admin server action).
+ */
+export async function deleteException(exceptionId: string, shipmentId: string) {
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from("shipment_exceptions")
+    .delete()
+    .eq("id", exceptionId);
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  revalidatePath("/admin/shipments/" + shipmentId);
   return { error: null };
 }

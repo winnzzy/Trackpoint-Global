@@ -71,16 +71,50 @@ CREATE TABLE IF NOT EXISTS company_settings (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- Shipment exceptions / alerts table
+CREATE TABLE IF NOT EXISTS shipment_exceptions (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  shipment_id UUID NOT NULL REFERENCES shipments(id) ON DELETE CASCADE,
+  
+  -- Classification
+  type TEXT NOT NULL DEFAULT 'delay',
+  severity TEXT NOT NULL DEFAULT 'warning',
+  status TEXT NOT NULL DEFAULT 'active',
+  
+  -- Content
+  title TEXT NOT NULL,
+  customer_message TEXT,
+  location TEXT,
+  action_required BOOLEAN NOT NULL DEFAULT false,
+  action_label TEXT,
+  updated_eta TIMESTAMPTZ,
+  
+  -- Timing
+  reported_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  resolved_at TIMESTAMPTZ,
+  
+  -- Admin only (never exposed publicly)
+  internal_note TEXT,
+  
+  -- Metadata
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 -- Indexes
 CREATE INDEX IF NOT EXISTS idx_shipments_tracking_number ON shipments(tracking_number);
 CREATE INDEX IF NOT EXISTS idx_shipments_status ON shipments(status);
 CREATE INDEX IF NOT EXISTS idx_tracking_events_shipment_id ON tracking_events(shipment_id);
 CREATE INDEX IF NOT EXISTS idx_tracking_events_event_time ON tracking_events(event_time);
+CREATE INDEX IF NOT EXISTS idx_exceptions_shipment_id ON shipment_exceptions(shipment_id);
+CREATE INDEX IF NOT EXISTS idx_exceptions_status ON shipment_exceptions(status);
+CREATE INDEX IF NOT EXISTS idx_exceptions_shipment_active ON shipment_exceptions(shipment_id, status) WHERE status = 'active';
 
 -- Row Level Security
 ALTER TABLE shipments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE tracking_events ENABLE ROW LEVEL SECURITY;
 ALTER TABLE company_settings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE shipment_exceptions ENABLE ROW LEVEL SECURITY;
 
 -- Admin-only policies for shipments (using auth.uid() for authenticated users)
 CREATE POLICY "Admin can manage shipments" ON shipments
@@ -90,6 +124,9 @@ CREATE POLICY "Admin can manage tracking events" ON tracking_events
   FOR ALL USING (auth.role() = 'authenticated');
 
 CREATE POLICY "Admin can manage settings" ON company_settings
+  FOR ALL USING (auth.role() = 'authenticated');
+
+CREATE POLICY "Admin can manage shipment exceptions" ON shipment_exceptions
   FOR ALL USING (auth.role() = 'authenticated');
 
 -- Public read access for company_settings (so public pages can read company info)
@@ -112,4 +149,8 @@ CREATE TRIGGER update_shipments_updated_at
 
 CREATE TRIGGER update_company_settings_updated_at
   BEFORE UPDATE ON company_settings
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_shipment_exceptions_updated_at
+  BEFORE UPDATE ON shipment_exceptions
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
