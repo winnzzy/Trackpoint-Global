@@ -13,7 +13,7 @@ export default function TrackingHeroForm() {
     e.preventDefault();
     setError('');
 
-    const trimmed = trackingNumber.trim();
+    const trimmed = trackingNumber.trim().toUpperCase();
     if (!trimmed) {
       setError('Please enter a tracking number.');
       return;
