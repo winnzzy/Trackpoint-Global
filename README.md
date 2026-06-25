@@ -308,13 +308,13 @@ The seed file (`supabase/seed.sql`) includes 7 realistic shipments with multiple
 
 | # | Tracking Number | Route | Type | Status |
 |---|----------------|-------|------|--------|
-| 1 | TPG-20240626-1024 | Lagos → London | Express | In Transit |
-| 2 | TPG-20240625-2048 | Abuja → New York | International | At Customs |
-| 3 | TPG-20240620-3072 | Kano → Toronto | Standard | Out for Delivery |
-| 4 | TPG-20240618-4096 | Port Harcourt → Dubai | Express | Delivered |
-| 5 | TPG-20240622-5120 | Lagos → Manchester | Standard | Delayed |
-| 6 | TPG-20240615-6144 | Accra → New York | International | Delivered |
-| 7 | TPG-20240624-7168 | Abuja → Dubai | Express | Shipment Created |
+| 1 | TPG-2026-00147 | Sheridan, US → London, UK | Express | In Transit |
+| 2 | TPG-2026-00152 | New York, US → Dubai, UAE | International | At Customs |
+| 3 | TPG-2026-00098 | Chicago, US → Toronto, CA | Standard | Delivered |
+| 4 | TPG-2026-00163 | Los Angeles, US → Sydney, AU | Express | Out for Delivery |
+| 5 | TPG-2026-00139 | Miami, US → Accra, GH | Standard | Delayed |
+| 6 | TPG-2026-00171 | Dallas, US → Singapore, SG | International | Shipment Created |
+| 7 | TPG-2026-00158 | Seattle, US → Tokyo, JP | Standard | In Transit |
 
 Each shipment has 2–6 tracking events with realistic location progression and timestamps.
 

@@ -2,18 +2,18 @@ import Link from 'next/link';
 
 export const metadata = {
   title: 'About Us | TrackPoint Global',
-  description: 'TrackPoint Global is a leading international courier and logistics company specializing in fast, secure, and reliable delivery services across Africa, Europe, the Americas, and the Middle East.',
+  description: 'TrackPoint Global is a leading international courier and logistics company specializing in fast, secure, and reliable delivery services across the globe.',
 };
 
 export default function AboutPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-gradient-to-br from-blue-600 to-blue-800 py-20">
+      <section className="bg-gradient-to-br from-navy to-navy-dark py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl sm:text-5xl font-bold text-white mb-6">About TrackPoint Global</h1>
-          <p className="text-xl text-blue-100 max-w-3xl mx-auto">
-            Connecting businesses and individuals to the world through reliable, fast, and secure courier services.
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            Connecting businesses and individuals worldwide through reliable, fast, and secure courier services.
           </p>
         </div>
       </section>
@@ -26,34 +26,34 @@ export default function AboutPage() {
               <h2 className="text-3xl font-bold text-gray-900 mb-6">Who We Are</h2>
               <div className="space-y-4 text-gray-600">
                 <p>
-                  TrackPoint Global was founded with a clear mission: to make international shipping from Africa
-                  as seamless and reliable as shipping from anywhere else in the world. Headquartered in Lagos, Nigeria,
-                  we have built a logistics network that spans over 50 countries across Africa, Europe, the Americas,
-                  and the Middle East.
+                  TrackPoint Global was founded with a clear mission: to make international shipping
+                  as seamless and reliable as domestic delivery. Based in Sheridan, Wyoming, we have built
+                  a logistics network that spans over 100 countries across six continents.
                 </p>
                 <p>
-                  We understand the unique challenges of cross-border shipping from West Africa — from customs
-                  complexities to last-mile delivery in remote areas. That is why we have invested in technology,
-                  partnerships, and local expertise to remove friction from every step of the shipping process.
+                  We understand the complexities of cross-border logistics — from customs compliance
+                  to last-mile delivery in hard-to-reach destinations. That is why we have invested
+                  in technology, carrier partnerships, and local expertise to remove friction from every
+                  step of the shipping process.
                 </p>
                 <p>
-                  Whether you are a business shipping products to international customers, an individual sending
-                  a parcel to family abroad, or a company managing a global supply chain — TrackPoint Global
+                  Whether you are an e-commerce brand shipping to international customers, an individual
+                  sending a parcel abroad, or a company managing a global supply chain — TrackPoint Global
                   provides the infrastructure, transparency, and support you need.
                 </p>
               </div>
             </div>
             <div className="mt-10 lg:mt-0">
-              <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-2xl p-8 border border-blue-100">
+              <div className="bg-gradient-to-br from-orange/5 to-orange/10 rounded-2xl p-8 border border-orange/20">
                 <div className="grid grid-cols-2 gap-6">
                   {[
-                    { value: '50+', label: 'Countries Served' },
-                    { value: '10K+', label: 'Deliveries Completed' },
+                    { value: '100+', label: 'Countries Served' },
+                    { value: '50K+', label: 'Deliveries Completed' },
                     { value: '98%', label: 'On-Time Rate' },
                     { value: '24/7', label: 'Tracking & Support' },
                   ].map((stat) => (
                     <div key={stat.label} className="text-center">
-                      <p className="text-3xl font-bold text-blue-600">{stat.value}</p>
+                      <p className="text-3xl font-bold text-orange">{stat.value}</p>
                       <p className="text-sm text-gray-600 mt-1">{stat.label}</p>
                     </div>
                   ))}
@@ -84,21 +84,21 @@ export default function AboutPage() {
               },
               {
                 title: 'Speed',
-                description: 'Time matters. Our express services deliver in 1–3 business days, and our logistics network is optimised for the fastest possible transit times.',
+                description: 'Time matters. Our express services deliver in 1–3 business days, and our logistics network is optimised for the fastest possible transit times across continents.',
                 icon: (
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 ),
               },
               {
                 title: 'Customer First',
-                description: 'Our support team is available around the clock. We believe every customer deserves responsive, helpful, and transparent communication.',
+                description: 'Our support team is available around the clock. We believe every customer deserves responsive, helpful, and transparent communication — no matter their location.',
                 icon: (
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
                 ),
               },
             ].map((value) => (
               <div key={value.title} className="bg-white rounded-xl p-8 border border-gray-200 text-center">
-                <div className="w-14 h-14 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mx-auto mb-5">
+                <div className="w-14 h-14 rounded-full bg-orange/10 text-orange flex items-center justify-center mx-auto mb-5">
                   <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     {value.icon}
                   </svg>
@@ -115,21 +115,21 @@ export default function AboutPage() {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Network</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Global Network</h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              We operate across major trade routes and logistics hubs, with a growing presence in key markets.
+              We operate across major trade routes and logistics hubs on every continent, with a growing presence in key markets.
             </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {[
-              { region: 'West Africa', cities: 'Lagos, Abuja, Accra, Kano, Port Harcourt' },
-              { region: 'East Africa', cities: 'Nairobi, Dar es Salaam, Kampala' },
-              { region: 'Southern Africa', cities: 'Johannesburg, Cape Town, Lusaka' },
-              { region: 'United Kingdom', cities: 'London, Manchester, Birmingham' },
-              { region: 'North America', cities: 'New York, Toronto, Houston' },
-              { region: 'Middle East', cities: 'Dubai, Abu Dhabi, Doha' },
-              { region: 'Europe', cities: 'Dublin, Amsterdam, Frankfurt' },
-              { region: 'Asia', cities: 'Singapore, Mumbai (coming soon)' },
+              { region: 'North America', cities: 'New York, Los Angeles, Toronto, Chicago, Houston' },
+              { region: 'United Kingdom', cities: 'London, Manchester, Birmingham, Edinburgh' },
+              { region: 'Western Europe', cities: 'Paris, Amsterdam, Frankfurt, Madrid, Milan' },
+              { region: 'Middle East', cities: 'Dubai, Abu Dhabi, Doha, Riyadh, Istanbul' },
+              { region: 'Asia Pacific', cities: 'Singapore, Tokyo, Mumbai, Sydney, Hong Kong' },
+              { region: 'Africa', cities: 'Lagos, Nairobi, Johannesburg, Accra, Cairo' },
+              { region: 'Latin America', cities: 'São Paulo, Mexico City, Bogotá, Buenos Aires' },
+              { region: 'Eastern Europe', cities: 'Warsaw, Prague, Bucharest, Budapest' },
             ].map((item) => (
               <div key={item.region} className="bg-gray-50 rounded-xl p-5 border border-gray-100">
                 <p className="text-sm font-semibold text-gray-900 mb-1">{item.region}</p>
@@ -141,16 +141,16 @@ export default function AboutPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-16 bg-blue-600">
+      <section className="py-16 bg-navy">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">Partner With Us</h2>
-          <p className="text-blue-100 mb-8 max-w-2xl mx-auto">
-            Whether you need to ship one parcel or manage hundreds of deliveries a month, we are ready to help.
+          <p className="text-gray-300 mb-8 max-w-2xl mx-auto">
+            Whether you need to ship one parcel or manage thousands of deliveries a month, we are ready to help you scale globally.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/contact"
-              className="bg-white text-blue-700 hover:bg-blue-50 font-semibold px-8 py-3 rounded-xl transition"
+              className="bg-orange hover:bg-orange-dark text-white font-semibold px-8 py-3 rounded-xl transition"
             >
               Get in Touch
             </Link>

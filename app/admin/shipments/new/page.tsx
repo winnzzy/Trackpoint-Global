@@ -20,7 +20,7 @@ export default function NewShipmentPage() {
     receiver_name: "",
     receiver_phone: "",
     receiver_email: "",
-    origin_country: "Nigeria",
+    origin_country: "United States",
     origin_city: "",
     destination_country: "United Kingdom",
     destination_city: "",
@@ -134,7 +134,7 @@ export default function NewShipmentPage() {
             </div>
             <div>
               <label className={labelClass}>Phone</label>
-              <input name="sender_phone" value={form.sender_phone} onChange={handleChange} className={inputClass} placeholder="+234 xxx xxx xxxx" />
+              <input name="sender_phone" value={form.sender_phone} onChange={handleChange} className={inputClass} placeholder="+1 xxx xxx xxxx" />
             </div>
             <div className="md:col-span-2">
               <label className={labelClass}>Email</label>
@@ -174,7 +174,7 @@ export default function NewShipmentPage() {
             </div>
             <div>
               <label className={labelClass}>Origin City *</label>
-              <input name="origin_city" value={form.origin_city} onChange={handleChange} className={inputClass} required placeholder="e.g. Lagos" />
+              <input name="origin_city" value={form.origin_city} onChange={handleChange} className={inputClass} required placeholder="e.g. Sheridan" />
             </div>
             <div>
               <label className={labelClass}>Destination Country *</label>
@@ -211,7 +211,7 @@ export default function NewShipmentPage() {
             </div>
             <div>
               <label className={labelClass}>Current Location</label>
-              <input name="current_location" value={form.current_location} onChange={handleChange} className={inputClass} placeholder="e.g. Lagos Sorting Hub" />
+              <input name="current_location" value={form.current_location} onChange={handleChange} className={inputClass} placeholder="e.g. New York Sorting Hub" />
             </div>
             <div className="md:col-span-2">
               <label className={labelClass}>Package Description</label>

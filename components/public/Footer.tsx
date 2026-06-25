@@ -37,10 +37,10 @@ export default function Footer() {
             <h3 className="font-semibold text-white mb-4">Our Services</h3>
             <ul className="space-y-2 text-sm text-gray-400">
               <li><Link href="/services" className="hover:text-orange transition-colors">International Courier</Link></li>
-              <li><Link href="/services" className="hover:text-orange transition-colors">Domestic Shipping</Link></li>
-              <li><Link href="/services" className="hover:text-orange transition-colors">Document Delivery</Link></li>
               <li><Link href="/services" className="hover:text-orange transition-colors">Express Shipping</Link></li>
-              <li><Link href="/services" className="hover:text-orange transition-colors">Business Logistics</Link></li>
+              <li><Link href="/services" className="hover:text-orange transition-colors">Freight & Cargo</Link></li>
+              <li><Link href="/services" className="hover:text-orange transition-colors">E-commerce Fulfillment</Link></li>
+              <li><Link href="/services" className="hover:text-orange transition-colors">Customs & Compliance</Link></li>
             </ul>
           </div>
 
@@ -50,7 +50,7 @@ export default function Footer() {
             <ul className="space-y-3 text-sm text-gray-400">
               <li className="flex items-center gap-2">
                 <Phone className="h-4 w-4 text-orange" />
-                +234 800 123 4567
+                +1 (307) 555-0198
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="h-4 w-4 text-orange" />
@@ -58,7 +58,7 @@ export default function Footer() {
               </li>
               <li className="flex items-start gap-2">
                 <MapPin className="h-4 w-4 text-orange mt-0.5" />
-                12 Marina Road, Victoria Island, Lagos, Nigeria
+                30 N Gould St, Sheridan, WY 82801, United States
               </li>
             </ul>
           </div>

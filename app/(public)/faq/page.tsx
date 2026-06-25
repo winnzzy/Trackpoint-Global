@@ -14,7 +14,7 @@ const faqs = [
   },
   {
     question: 'How long does domestic delivery take?',
-    answer: 'Domestic deliveries within Nigeria typically take 1–3 business days depending on the origin and destination cities. Same-city deliveries can often be completed within 24 hours. Express domestic options are available for time-sensitive shipments.',
+    answer: 'Domestic delivery times vary by country and city. Same-city deliveries can often be completed within 24 hours, while cross-country shipments typically take 1–3 business days. Express domestic options are available for time-sensitive shipments.',
   },
   {
     question: 'What happens if my package is delayed?',
@@ -30,7 +30,7 @@ const faqs = [
   },
   {
     question: 'How do I contact support about my shipment?',
-    answer: 'You can reach our support team by email at support@trackpointglobal.com, by phone at +234 800 555 0199, or through the contact form on our Contact page. Our team is available Monday–Friday 8 AM–6 PM and Saturday 9 AM–2 PM (WAT). For urgent queries, we recommend calling directly.',
+    answer: 'You can reach our support team by email at support@trackpointglobal.com, by phone at +1 (307) 555-0198, or through the contact form on our Contact page. Our team is available Monday–Friday 8 AM–6 PM and Saturday 9 AM–2 PM (MST). For urgent queries, we recommend calling directly.',
   },
   {
     question: 'What items can I ship internationally?',
@@ -52,10 +52,10 @@ export default function FAQPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-gradient-to-br from-blue-600 to-blue-800 py-20">
+      <section className="bg-gradient-to-br from-navy to-navy-dark py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl sm:text-5xl font-bold text-white mb-6">Frequently Asked Questions</h1>
-          <p className="text-xl text-blue-100 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
             Find answers to common questions about our shipping, tracking, and delivery services.
           </p>
         </div>
@@ -107,7 +107,7 @@ export default function FAQPage() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/contact"
-              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3 rounded-xl transition"
+              className="bg-orange hover:bg-orange-dark text-white font-semibold px-8 py-3 rounded-xl transition"
             >
               Contact Support
             </Link>

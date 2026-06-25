@@ -2,17 +2,17 @@ import Link from 'next/link';
 
 export const metadata = {
   title: 'Contact Us | TrackPoint Global',
-  description: 'Get in touch with TrackPoint Global support team. Reach us by email, phone, or visit our office in Lagos, Nigeria.',
+  description: 'Get in touch with TrackPoint Global support team. Reach us by email, phone, or visit our office in Sheridan, Wyoming, United States.',
 };
 
 export default function ContactPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-gradient-to-br from-blue-600 to-blue-800 py-20">
+      <section className="bg-gradient-to-br from-navy to-navy-dark py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl sm:text-5xl font-bold text-white mb-6">Contact Us</h1>
-          <p className="text-xl text-blue-100 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
             Have a question about a shipment? Need a shipping quote? Our team is ready to help.
           </p>
         </div>
@@ -27,7 +27,7 @@ export default function ContactPage() {
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">Get in Touch</h2>
                 <p className="text-gray-600 mb-8">
-                  Our customer support team is available to assist you with tracking, shipping quotes, 
+                  Our customer support team is available to assist you with tracking, shipping quotes,
                   and any questions about our services.
                 </p>
               </div>
@@ -35,7 +35,7 @@ export default function ContactPage() {
               {/* Contact Cards */}
               <div className="space-y-4">
                 <div className="flex items-start gap-4 p-4 rounded-xl bg-gray-50 border border-gray-100">
-                  <div className="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
+                  <div className="w-10 h-10 rounded-lg bg-orange/10 text-orange flex items-center justify-center shrink-0">
                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
@@ -48,20 +48,20 @@ export default function ContactPage() {
                 </div>
 
                 <div className="flex items-start gap-4 p-4 rounded-xl bg-gray-50 border border-gray-100">
-                  <div className="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
+                  <div className="w-10 h-10 rounded-lg bg-orange/10 text-orange flex items-center justify-center shrink-0">
                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                     </svg>
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-gray-900">Phone</p>
-                    <p className="text-sm text-gray-600">+234 800 555 0199</p>
-                    <p className="text-xs text-gray-400 mt-1">Mon–Fri 8 AM – 6 PM (WAT)</p>
+                    <p className="text-sm text-gray-600">+1 (307) 555-0198</p>
+                    <p className="text-xs text-gray-400 mt-1">Mon–Fri 8 AM – 6 PM (MST)</p>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-4 p-4 rounded-xl bg-gray-50 border border-gray-100">
-                  <div className="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
+                  <div className="w-10 h-10 rounded-lg bg-orange/10 text-orange flex items-center justify-center shrink-0">
                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -69,20 +69,20 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-gray-900">Office</p>
-                    <p className="text-sm text-gray-600">123 Logistics Avenue</p>
-                    <p className="text-sm text-gray-600">Victoria Island, Lagos, Nigeria</p>
+                    <p className="text-sm text-gray-600">30 N Gould St</p>
+                    <p className="text-sm text-gray-600">Sheridan, WY 82801, United States</p>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-4 p-4 rounded-xl bg-gray-50 border border-gray-100">
-                  <div className="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
+                  <div className="w-10 h-10 rounded-lg bg-orange/10 text-orange flex items-center justify-center shrink-0">
                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-gray-900">Business Hours</p>
-                    <p className="text-sm text-gray-600">Monday – Friday: 8:00 AM – 6:00 PM</p>
+                    <p className="text-sm text-gray-600">Monday – Friday: 8:00 AM – 6:00 PM (MST)</p>
                     <p className="text-sm text-gray-600">Saturday: 9:00 AM – 2:00 PM</p>
                     <p className="text-sm text-gray-400">Sunday: Closed</p>
                   </div>
@@ -101,7 +101,7 @@ export default function ContactPage() {
                   For urgent shipment queries, message us on WhatsApp for faster response.
                 </p>
                 <div className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-700">
-                  +234 800 555 0199
+                  +1 (307) 555-0198
                   <span className="text-xs text-emerald-500 font-normal">(UI only — not linked)</span>
                 </div>
               </div>
@@ -125,7 +125,7 @@ export default function ContactPage() {
                         id="name"
                         name="name"
                         required
-                        className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition"
+                        className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition"
                         placeholder="Your full name"
                       />
                     </div>
@@ -138,7 +138,7 @@ export default function ContactPage() {
                         id="email"
                         name="email"
                         required
-                        className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition"
+                        className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition"
                         placeholder="you@example.com"
                       />
                     </div>
@@ -152,8 +152,8 @@ export default function ContactPage() {
                         type="tel"
                         id="phone"
                         name="phone"
-                        className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition"
-                        placeholder="+234 xxx xxx xxxx"
+                        className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition"
+                        placeholder="+1 (xxx) xxx-xxxx"
                       />
                     </div>
                     <div>
@@ -164,7 +164,7 @@ export default function ContactPage() {
                         type="text"
                         id="tracking_number"
                         name="tracking_number"
-                        className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition"
+                        className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition"
                         placeholder="TPG-2026-XXXXX (optional)"
                       />
                     </div>
@@ -177,7 +177,7 @@ export default function ContactPage() {
                       id="subject"
                       name="subject"
                       required
-                      className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition bg-white"
+                      className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition bg-white"
                     >
                       <option value="">Select a topic</option>
                       <option value="tracking">Shipment Tracking Query</option>
@@ -197,13 +197,13 @@ export default function ContactPage() {
                       name="message"
                       rows={5}
                       required
-                      className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition resize-y"
+                      className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:border-orange focus:ring-2 focus:ring-orange/20 outline-none transition resize-y"
                       placeholder="Tell us how we can help…"
                     />
                   </div>
                   <button
                     type="submit"
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition shadow-sm"
+                    className="w-full bg-orange hover:bg-orange-dark text-white font-semibold py-3 rounded-lg transition shadow-sm"
                   >
                     Send Message
                   </button>
@@ -224,7 +224,7 @@ export default function ContactPage() {
           <p className="text-gray-600 mb-6">Get instant updates on your shipment status.</p>
           <Link
             href="/track"
-            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3 rounded-xl transition"
+            className="inline-flex items-center gap-2 bg-orange hover:bg-orange-dark text-white font-semibold px-8 py-3 rounded-xl transition"
           >
             Track Your Shipment
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

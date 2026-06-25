@@ -83,26 +83,26 @@ export const SHIPMENT_STATUSES: ShipmentStatus[] = [
 export const SHIPMENT_TYPES = ['Standard', 'Express', 'International', 'Same Day', 'Economy'] as const;
 
 export const COUNTRIES = [
-  'Nigeria',
-  'Ghana',
-  'Kenya',
-  'South Africa',
-  'United Kingdom',
   'United States',
+  'United Kingdom',
   'Canada',
-  'United Arab Emirates',
   'Germany',
   'France',
   'Netherlands',
-  'Turkey',
-  'China',
-  'India',
-  'Brazil',
+  'United Arab Emirates',
   'Australia',
   'Japan',
+  'Singapore',
+  'South Africa',
+  'Nigeria',
+  'Brazil',
+  'India',
+  'China',
+  'Turkey',
   'Saudi Arabia',
-  'Egypt',
-  'Ethiopia',
+  'Mexico',
+  'Kenya',
+  'Ghana',
 ] as const;
 
 export const STATUS_COLORS: Record<string, { bg: string; text: string; dot: string }> = {

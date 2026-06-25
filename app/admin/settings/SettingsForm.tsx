@@ -16,14 +16,14 @@ export default function SettingsForm({ initialSettings }: SettingsFormProps) {
     company_name: 'TrackPoint Global',
     tagline: 'Fast, Reliable, Global Courier Services',
     support_email: 'support@trackpointglobal.com',
-    support_phone: '+234 800 555 0199',
-    office_address: '123 Logistics Avenue, Victoria Island, Lagos, Nigeria',
-    business_hours: 'Mon – Fri: 8:00 AM – 6:00 PM (WAT) | Sat: 9:00 AM – 2:00 PM',
+    support_phone: '+1 (307) 555-0198',
+    office_address: '30 N Gould St, Sheridan, WY 82801, United States',
+    business_hours: 'Mon – Fri: 8:00 AM – 6:00 PM (MST) | Sat: 9:00 AM – 2:00 PM',
     logo_url: '',
-    brand_color: '#2563eb',
+    brand_color: '#E8600A',
     company_description: '',
-    default_origin_country: 'Nigeria',
-    default_origin_city: 'Lagos',
+    default_origin_country: 'United States',
+    default_origin_city: 'Sheridan',
     default_support_response: '',
     default_tracking_help: '',
   };
@@ -232,7 +232,7 @@ export default function SettingsForm({ initialSettings }: SettingsFormProps) {
                   <input
                     type="color"
                     id="brand_color_picker"
-                    defaultValue={getVal('brand_color') || '#2563eb'}
+                  defaultValue={getVal('brand_color') || '#E8600A'}
                     className="h-10 w-14 rounded border border-gray-300 cursor-pointer"
                     onChange={(e) => {
                       const input = document.getElementById('brand_color') as HTMLInputElement;
@@ -243,7 +243,7 @@ export default function SettingsForm({ initialSettings }: SettingsFormProps) {
                     type="text"
                     id="brand_color"
                     name="brand_color"
-                    defaultValue={getVal('brand_color') || '#2563eb'}
+                    defaultValue={getVal('brand_color') || '#E8600A'}
                     className="flex-1 rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition font-mono"
                   />
                 </div>
@@ -328,7 +328,7 @@ export default function SettingsForm({ initialSettings }: SettingsFormProps) {
           <button
             type="submit"
             disabled={isPending}
-            className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 outline-none transition disabled:opacity-60 disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-2 rounded-lg bg-orange px-6 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-orange-dark focus:ring-2 focus:ring-orange focus:ring-offset-2 outline-none transition disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {isPending ? (
               <>
